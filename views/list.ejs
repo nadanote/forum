@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="/main.css" rel="stylesheet">
+</head>
+<body class="grey-bg ">
+
+    <%- include("nav.ejs") %>
+    <div class="white-bg">
+        <% for (let i = 0; i < posts.length; i++){ %>
+            <div class="list-box">
+                <h4>
+                    <a href="/detail/<%= posts[i]._id %>"><%= posts[i].title %></a>
+                    <a href="/edit/<%= posts[i]._id %>">✏️</a>
+                    <span class="delete" data-id="<%= posts[i]._id %>">🗑️</span>
+
+                </h4>
+                <p><%= posts[i].content %></p>
+            </div>
+        <% } %>
+
+      </div>  
+   
+
+      <style>
+        .grey-bg {
+        background: #eee;
+        }
+        .white-bg {
+        background: white;
+        margin: 20px;
+        border-radius: 5px;
+        }
+        .list-box {
+        padding : 10px;
+        border-bottom: 1px solid#eee;
+        }
+        .list-box h4{
+        font-size: 16px;
+        margin: 5px;
+        }
+        .list-box p {
+        font-size: 13px;
+        margin: 5px;
+        color: grey;
+        }
+        a{
+            text-decoration: none;
+        }
+
+        .delete:hover{
+            cursor: pointer;
+        }
+
+      </style>
+
+    <script>
+        document.querySelectorAll('.delete').forEach(button => {
+            button.addEventListener('click', function(){
+            let postId = this.getAttribute('data-id');
+            fetch(`/delete/${postId}`, {
+                method : 'POST',
+                headers : {
+                    'Content-Type' : 'application/json'
+                },
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    return response.json().then(data => {
+                        throw new Error(data.message);
+                    });
+                }
+            })
+            .then(data => {
+                console.log('Success:', data);
+                location.href = location.href; // 페이지 리다이렉트
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        })
+        })
+        
+    </script>
+</body>
+</html>
