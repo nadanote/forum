@@ -83,7 +83,7 @@ app.post('/add', async(요청, 응답)=>{
 
 app.get('/detail/:id', async(요청, 응답)=>{
   try{
-    // 요청.params.aaaa를 사용하여 _id를 가져옵니다.
+    // 요청.params.id 사용하여 _id를 가져옵니다.
     let result = await db.collection('post').findOne({_id : new ObjectId(요청.params.id)}) // 이 데이터 가진 document 1개 찾아옴 
     console.log('result : ', result); 
 
@@ -138,7 +138,7 @@ app.post('/delete/:id', async (요청, 응답)=>{
             응답.status(404).json({ message: 'No document found' });
         }
     } catch(error){
-        console.error('INvaild ObjectId:', error);
+        console.error('Invaild ObjectId:', error);
         응답.status(400).send('Invalid ID format');
     }
   
